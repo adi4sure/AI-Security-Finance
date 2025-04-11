@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Navigation Sidebar -->
+        <nav class="dashboard-nav">
+            <div class="nav-header">
+                <h2><i class="fas fa-shield-alt"></i> Security Dashboard</h2>
+            </div>
+            <div class="nav-links">
+                <a href="dashboard.html">
+                    <i class="fas fa-home"></i>
+                    Overview
+                </a>
+                <a href="security-alerts.html">
+                    <i class="fas fa-bell"></i>
+                    Security Alerts
+                </a>
+                <a href="expense-tracker.html">
+                    <i class="fas fa-wallet"></i>
+                    Expense Tracker
+                </a>
+                <a href="budget-planner.html">
+                    <i class="fas fa-chart-pie"></i>
+                    Budget Planner
+                </a>
+                <a href="chatbot.html" class="active">
+                    <i class="fas fa-robot"></i>
+                    AI Assistant
+                </a>
+                <a href="ai-assistent.html">
+                    <i class="fas fa-brain"></i>
+                    AI Assistent
+                </a>
+                <a href="settings.html">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="dashboard-content">
+            <div class="chatbot-container">
+                <div class="section-header">
+                    <h2><i class="fas fa-robot"></i> AI Assistant</h2>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="clearChatBtn">
+                            <i class="fas fa-trash"></i> Clear Chat
+                        </button>
+                    </div>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Chat messages will be dynamically loaded here -->
+                </div>
+
+                <div class="chat-input">
+                    <input type="text" id="userInput" placeholder="Type your message here...">
+                    <button class="btn btn-primary" id="sendMessageBtn">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 

@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System File Scan - SecureFinance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+         :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --dark-color: #1b263b;
+            --light-color: #f8f9fa;
+            --success-color: #4cc9f0;
+            --warning-color: #f8961e;
+            --danger-color: #f72585;
+            --gray-color: #adb5bd;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .dashboard-nav {
+            width: 250px;
+            background-color: var(--dark-color);
+            color: white;
+            padding: 1.5rem 0;
+            transition: var(--transition);
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .nav-header {
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .logo i {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+        }
+        
+        .logo h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .nav-links {
+            padding: 1.5rem 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 0.95rem;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .nav-links a.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .nav-links a i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .badge {
+            background-color: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: auto;
+        }
+        
+        .user-profile {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .user-details h4 {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .user-details p {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .logout-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .logout-btn:hover {
+            color: white;
+        }
+        
+        .dashboard-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+        }
+        
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .header-left h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .header-left p {
+            color: var(--gray-color);
+        }
+        
+        .scan-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        .upload-section {
+            grid-column: span 2;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+        }
+        
+        .upload-box {
+            border: 2px dashed #ddd;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 1.5rem;
+        }
+        
+        .upload-box:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .upload-box i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .upload-box h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .upload-box p {
+            color: var(--gray-color);
+            margin: 0.5rem 0;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .file-list {
+            border: 1px solid #eee;
+            border-radius: var(--border-radius);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        
+        .file-icon {
+            color: var(--primary-color);
+            margin-right: 0.75rem;
+        }
+        
+        .file-info {
+            flex: 1;
+        }
+        
+        .file-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .file-size {
+            font-size: 0.8rem;
+            color: var(--gray-color);
+        }
+        
+        .file-remove {
+            color: var(--danger-color);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .scan-options {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+        }
+        
+        .scan-options h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+        }
+        
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+        
+        .checkmark {
+            height: 20px;
+            width: 20px;
+            background-color: #eee;
+            border-radius: 4px;
+            margin-right: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .checkbox-container:hover input~.checkmark {
+            background-color: #ddd;
+        }
+        
+        .checkbox-container input:checked~.checkmark {
+            background-color: var(--primary-color);
+        }
+        
+        .checkmark:after {
+            content: "";
+            display: none;
+            color: white;
+        }
+        
+        .checkbox-container input:checked~.checkmark:after {
+            display: block;
+        }
+        
+        .checkbox-container .checkmark:after {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            font-size: 0.8rem;
+            color: white;
+        }
+        
+        .scan-results {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+        }
+        
+        .scan-results h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+        }
+        
+        .results-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        .result-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: var(--border-radius);
+        }
+        
+        .result-icon {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(67, 97, 238, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        
+        .result-info h4 {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .result-info p {
+            font-size: 0.85rem;
+            color: var(--gray-color);
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius);
+            color: white;
+            box-shadow: var(--box-shadow);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .toast-success {
+            background-color: var(--success-color);
+        }
+        
+        .toast-warning {
+            background-color: var(--warning-color);
+        }
+        
+        .toast-danger {
+            background-color: var(--danger-color);
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .scan-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-nav {
+                width: 70px;
+                overflow: hidden;
+            }
+            .logo h2,
+            .nav-links a span,
+            .badge,
+            .user-details,
+            .logout-btn span {
+                display: none;
+            }
+            .dashboard-content {
+                margin-left: 70px;
+            }
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .dashboard-nav {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 1rem 0;
+            }
+            .nav-links {
+                display: flex;
+                flex-wrap: wrap;
+                padding: 0.5rem;
+            }
+            .nav-links a {
+                padding: 0.5rem;
+                flex: 1 0 45%;
+                justify-content: center;
+            }
+            .dashboard-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+            .upload-box {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Navigation Sidebar -->
+        <nav class="dashboard-nav">
+            <div class="nav-header">
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <h2>SecureFinance</h2>
+                </div>
+            </div>
+
+            <div class="nav-links">
+                <a href="dashboard.html">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="system-scan.html" class="active">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>System Scan</span>
+                </a>
+                <a href="security-alerts.html">
+                    <i class="fas fa-bell"></i>
+                    <span>Security Alerts</span>
+                    <span class="badge">3</span>
+                </a>
+                <a href="expense-tracker.html">
+                    <i class="fas fa-wallet"></i>
+                    <span>Expense Tracker</span>
+                </a>
+                <a href="budget-planner.html">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Budget Planner</span>
+                </a>
+                <a href="assistent.html">
+                    <i class="fas fa-brain"></i>
+                    <span>AI Assistent</span>
+                </a>
+                <a href="settings.html">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+
+            <div class="user-profile">
+                <div class="profile-info">
+                    <img src="images/avatar.jpg" alt="User Avatar" class="avatar">
+                    <div class="user-details">
+                        <h4>Admin</h4>
+                        <p>Administrator</p>
+                    </div>
+                </div>
+                <button class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="dashboard-content">
+            <div class="content-header">
+                <div class="header-left">
+                    <h1>System File Scan</h1>
+                    <p>Upload and scan files for potential security threats</p>
+                </div>
+            </div>
+
+            <!-- File Upload Section -->
+            <div class="scan-container">
+                <div class="upload-section">
+                    <div class="upload-box" id="uploadBox">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>Drag & Drop Files Here</h3>
+                        <p>or</p>
+                        <button class="btn btn-primary" id="browseBtn">Browse Files</button>
+                        <input type="file" id="fileInput" style="display: none;">
+                    </div>
+                    <div class="file-list" id="fileList">
+                        <!-- File items will be added here dynamically -->
+                    </div>
+                </div>
+
+                <!-- Scan Options -->
+                <div class="scan-options">
+                    <h3>Scan Options</h3>
+                    <div class="option-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" checked id="deepScan">
+                            <span class="checkmark"></span>
+                            Deep Scan
+                        </label>
+                        <label class="checkbox-container">
+                            <input type="checkbox" checked id="malwareCheck">
+                            <span class="checkmark"></span>
+                            Check for Malware
+                        </label>
+                        <label class="checkbox-container">
+                            <input type="checkbox" checked id="vulnerabilityCheck">
+                            <span class="checkmark"></span>
+                            Check for Vulnerabilities
+                        </label>
+                    </div>
+                    <button class="btn btn-primary" id="startScanBtn">Start Scan</button>
+                </div>
+
+                <!-- Scan Results -->
+                <div class="scan-results" id="scanResults">
+                    <h3>Scan Results</h3>
+                    <div class="results-container">
+                        <div class="result-item">
+                            <div class="result-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="result-info">
+                                <h4>Security Status</h4>
+                                <p id="securityStatus">No threats detected</p>
+                            </div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="result-info">
+                                <h4>Scan Duration</h4>
+                                <p id="scanDuration">0 seconds</p>
+                            </div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-icon">
+                                <i class="fas fa-file"></i>
+                            </div>
+                            <div class="result-info">
+                                <h4>Files Scanned</h4>
+                                <p id="filesScanned">0 files</p>
+                            </div>
+                        </div>
+                        <div class="result-item" id="scanDetails" style="display: none;">
+                            <div class="result-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="result-info">
+                                <h4>Scan Details</h4>
+                                <p id="scanDetailsText">No details available</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadBox = document.getElementById('uploadBox');
+            const browseBtn = document.getElementById('browseBtn');
+            const fileInput = document.getElementById('fileInput');
+            const fileList = document.getElementById('fileList');
+            const startScanBtn = document.getElementById('startScanBtn');
+            const scanResults = document.getElementById('scanResults');
+            const deepScanCheckbox = document.getElementById('deepScan');
+            const malwareCheckbox = document.getElementById('malwareCheck');
+            const vulnerabilityCheckbox = document.getElementById('vulnerabilityCheck');
+
+            let files = [];
+            let scanStartTime;
+
+            // Handle drag and drop
+            uploadBox.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadBox.style.borderColor = 'var(--primary-color)';
+                uploadBox.style.backgroundColor = 'rgba(67, 97, 238, 0.1)';
+            });
+
+            uploadBox.addEventListener('dragleave', () => {
+                uploadBox.style.borderColor = '#ddd';
+                uploadBox.style.backgroundColor = 'transparent';
+            });
+
+            uploadBox.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadBox.style.borderColor = '#ddd';
+                uploadBox.style.backgroundColor = 'transparent';
+
+                if (e.dataTransfer.files.length) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+
+            // Handle file browsing
+            browseBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length) {
+                    handleFiles(fileInput.files);
+                }
+            });
+
+            // Handle files
+            function handleFiles(newFiles) {
+                files = Array.from(newFiles); // Replace existing files with new selection
+                renderFileList();
+            }
+
+            // Render file list
+            function renderFileList() {
+                fileList.innerHTML = '';
+
+                if (files.length === 0) {
+                    fileList.innerHTML = '<p class="empty-message" style="padding: 1rem; text-align: center; color: var(--gray-color);">No files selected</p>';
+                    return;
+                }
+
+                files.forEach((file, index) => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+
+                    const fileSize = formatFileSize(file.size);
+
+                    fileItem.innerHTML = `
+                        <i class="fas fa-file-alt file-icon"></i>
+                        <div class="file-info">
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${fileSize}</div>
+                        </div>
+                        <button class="file-remove" data-index="${index}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+
+                    fileList.appendChild(fileItem);
+                });
+
+                // Add event listeners to remove buttons
+                document.querySelectorAll('.file-remove').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const index = e.currentTarget.getAttribute('data-index');
+                        files.splice(index, 1);
+                        renderFileList();
+                    });
+                });
+            }
+
+            // Format file size
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i]);
+            }
+
+            // Start scan
+            startScanBtn.addEventListener('click', async() => {
+                if (files.length === 0) {
+                    showToast('Please select at least one file to scan', 'danger');
+                    return;
+                }
+
+                // Check file size limit (e.g., 32MB - VirusTotal's limit for API v3)
+                const maxSize = 32 * 1024 * 1024; // 32MB in bytes
+                if (files[0].size > maxSize) {
+                    showToast('File size exceeds 32MB limit', 'danger');
+                    return;
+                }
+
+                startScanBtn.disabled = true;
+                startScanBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Scanning...';
+                scanStartTime = new Date().getTime();
+
+                try {
+                    // In a real application, you would send this to your backend
+                    // For demonstration, we'll simulate the API call
+                    const formData = new FormData();
+                    formData.append('file', files[0]);
+
+                    // This is where you would normally make the fetch request to your backend
+                    // const response = await fetch('/api/scan', {
+                    //     method: 'POST',
+                    //     body: formData
+                    // });
+                    // const result = await response.json();
+
+                    // For demo purposes, we'll simulate a response after a delay
+                    const result = await simulateVirusTotalScan(files[0]);
+
+                    // Calculate scan duration
+                    const scanEndTime = new Date().getTime();
+                    const duration = ((scanEndTime - scanStartTime) / 1000).toFixed(2);
+
+                    // Update UI with results
+                    updateScanResults(result, duration);
+
+                    // Show success message
+                    const threatLevel = result.data.attributes.last_analysis_stats.malicious > 0 ? 'warning' : 'success';
+                    const message = threatLevel === 'warning' ?
+                        'Threats detected!' :
+                        'Scan completed - no threats found';
+                    showToast(message, threatLevel);
+
+                } catch (error) {
+                    console.error('Scan error:', error);
+                    showToast('Scan failed: ' + error.message, 'danger');
+                } finally {
+                    startScanBtn.disabled = false;
+                    startScanBtn.innerHTML = '<i class="fas fa-shield-alt"></i> Start Scan';
+                }
+            });
+
+            // Simulate VirusTotal scan response
+            function simulateVirusTotalScan(file) {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        // Generate random results for demonstration
+                        const isMalicious = Math.random() < 0.2; // 20% chance of being malicious
+
+                        const result = {
+                            data: {
+                                attributes: {
+                                    last_analysis_stats: {
+                                        malicious: isMalicious ? Math.floor(Math.random() * 10) + 1 : 0,
+                                        suspicious: isMalicious ? Math.floor(Math.random() * 5) : 0,
+                                        harmless: Math.floor(Math.random() * 60) + 40,
+                                        undetected: Math.floor(Math.random() * 20),
+                                        timeout: 0
+                                    },
+                                    names: [file.name],
+                                    type_description: "Portable Executable",
+                                    type_tag: "pe",
+                                    meaningful_name: file.name
+                                }
+                            }
+                        };
+
+                        resolve(result);
+                    }, 2000); // Simulate 2 second delay
+                });
+            }
+
+            // Update scan results in UI
+            function updateScanResults(result, duration) {
+                const stats = result.data.attributes.last_analysis_stats;
+                const threatsDetected = stats.malicious + stats.suspicious;
+
+                // Update security status
+                document.getElementById('securityStatus').textContent =
+                    threatsDetected > 0 ?
+                    `${threatsDetected} threat(s) detected` :
+                    'No threats detected';
+
+                // Update scan duration
+                document.getElementById('scanDuration').textContent = `${duration} seconds`;
+
+                // Update files scanned
+                document.getElementById('filesScanned').textContent =
+                    `${files.length} file${files.length > 1 ? 's' : ''}`;
+
+                // Show detailed scan information
+                const scanDetails = document.getElementById('scanDetails');
+                const scanDetailsText = document.getElementById('scanDetailsText');
+
+                if (threatsDetected > 0) {
+                    scanDetailsText.innerHTML = `
+                        <strong>${result.data.attributes.meaningful_name}</strong> was flagged by 
+                        ${stats.malicious} security vendors as malicious.<br>
+                        File type: ${result.data.attributes.type_description}
+                    `;
+                } else {
+                    scanDetailsText.innerHTML = `
+                        <strong>${result.data.attributes.meaningful_name}</strong> was scanned by 
+                        ${stats.harmless + stats.malicious + stats.suspicious} security vendors.<br>
+                        File type: ${result.data.attributes.type_description}
+                    `;
+                }
+
+                scanDetails.style.display = 'flex';
+                scanResults.style.display = 'block';
+            }
+
+            // Show toast notification
+            function showToast(message, type = 'info') {
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                toast.textContent = message;
+
+                // Add toast to body
+                document.body.appendChild(toast);
+
+                // Remove toast after animation
+                setTimeout(() => {
+                    toast.style.animation = 'slideIn 0.3s ease-out reverse';
+                    setTimeout(() => {
+                        toast.remove();
+                    }, 300);
+                }, 3000);
+            }
+
+            // Initialize empty file list
+            renderFileList();
+        });
+    </script>
+</body>
+
+</html>

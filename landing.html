@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Dashboard</title>
+    <link rel="stylesheet" href="css/landing.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="landing-container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content animate__animated animate__fadeIn">
+                <h1 class="gradient-text">Security Dashboard</h1>
+                <p class="subtitle">Advanced System Security & Monitoring</p>
+                <div class="cta-buttons">
+                    <a href="dashboard.html" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i>
+                        Get Started
+                    </a>
+                    <a href="#features" class="btn btn-secondary">
+                        <i class="fas fa-info-circle"></i>
+                        Learn More
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image animate__animated animate__fadeInRight">
+                <div class="floating-icons">
+                    <i class="fas fa-shield-alt icon-1"></i>
+                    <i class="fas fa-lock icon-2"></i>
+                    <i class="fas fa-chart-line icon-3"></i>
+                    <i class="fas fa-bell icon-4"></i>
+                    <i class="fas fa-cog icon-5"></i>
+                    <i class="fas fa-database icon-6"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features">
+            <h2 class="section-title">Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card animate__animated animate__fadeInUp">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>System Scan</h3>
+                    <p>Comprehensive system scanning with real-time threat detection</p>
+                </div>
+                <div class="feature-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3>Performance Monitor</h3>
+                    <p>Real-time system performance tracking and analysis</p>
+                </div>
+                <div class="feature-card animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Alert System</h3>
+                    <p>Instant notifications for security threats and system events</p>
+                </div>
+                <div class="feature-card animate__animated animate__fadeInUp" style="animation-delay: 0.6s">
+                    <div class="feature-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h3>Financial Tracking</h3>
+                    <p>Integrated financial monitoring and expense tracking</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats">
+            <div class="stats-container">
+                <div class="stat-item animate__animated animate__fadeInLeft">
+                    <i class="fas fa-shield-alt"></i>
+                    <div class="stat-content">
+                        <h3 class="counter" data-target="99.9">0</h3>
+                        <p>System Protection</p>
+                    </div>
+                </div>
+                <div class="stat-item animate__animated animate__fadeInLeft" style="animation-delay: 0.2s">
+                    <i class="fas fa-clock"></i>
+                    <div class="stat-content">
+                        <h3>on time</h3>
+                        <p>Real-time Monitoring</p>
+                    </div>
+                </div>
+                <div class="stat-item animate__animated animate__fadeInLeft" style="animation-delay: 0.4s">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-content">
+                        <h3 class="counter" data-target="you">0</h3>
+                        <p>Active Users</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta">
+            <div class="cta-content animate__animated animate__fadeIn">
+                <h2>Ready to Get Started?</h2>
+                <p>Join thousands of users who trust our security solutions</p>
+                <button id="openLoginModal" class="btn btn-primary btn-large">
+                    <i class="fas fa-rocket"></i>
+                    Get Started
+                </button>
+            </div>
+        </section>
+
+        <!-- Login Modal -->
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Welcome Back</h2>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm" class="login-form">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <div class="input-group">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="email" name="email" required placeholder="Enter your email">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <div class="input-group">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="password" name="password" required placeholder="Enter your password">
+                            </div>
+                        </div>
+                        <div class="form-options">
+                            <label class="remember-me">
+                                <input type="checkbox" id="remember" name="remember">
+                                <span>Remember me</span>
+                            </label>
+                            <a href="#" class="forgot-password">Forgot Password?</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login
+                        </button>
+                    </form>
+                    <div class="login-footer">
+                        <p>Don't have an account? <a href="#" id="startTrial">Start Free Trial</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Security Dashboard</span>
+                </div>
+                <div class="footer-links">
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+                <a href="assistent.html" class="ai-assistant-link">
+                    <i class="fas fa-robot"></i>
+                    AI Assistant
+                </a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Security Dashboard. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="js/landing.js"></script>
+</body>
+</html> 
